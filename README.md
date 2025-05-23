@@ -16,9 +16,8 @@ require(survival)
 require(mboost)
 
 
-# load functions required for CLogitBoost
-library(devtools)
-source_url("https://github.com/Schaubert/CLogitBoost/blob/main/CLogit.R")
+# load functions required for CLogitBoost, get it from https://github.com/Schaubert/CLogitBoost/blob/main/CLogit.R
+source("CLogit.R")
 
 # get illustrative data
 data("illu.data")
