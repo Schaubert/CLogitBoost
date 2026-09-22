@@ -8,30 +8,42 @@ This repository contains code for the family CLogit() that can be used within th
 The following code illustrates how to use both the family and the supporting function for cross-validation within mboost. 
 
 ```
-# get all required packages 
-require("devtools")
-devtools::install_github("Schaubert/ClogitTree")
+# Install the required GitHub package if necessary
+if (!requireNamespace("CLogitTree", quietly = TRUE)) {
+  if (!requireNamespace("remotes", quietly = TRUE)) {
+    install.packages("remotes")
+  }
+
+  remotes::install_github("Schaubert/ClogitTree")
+}
+
+# Load the required packages
 library(CLogitTree)
-require(survival)
-require(mboost)
+library(survival)
+library(mboost)
 
-
-# load functions required for CLogitBoost, get it from https://github.com/Schaubert/CLogitBoost/blob/main/CLogit.R
-source("CLogit.R")
+# Load the functions required for CLogitBoost directly from GitHub
+source(
+  "https://raw.githubusercontent.com/Schaubert/CLogitBoost/main/CLogit.R"
+)
 
 # get illustrative data
 data("illu.data")
 illu.data$resp <- cbind(illu.data$y, illu.data$strata)
 
-# fit CLR using clogit
+# fit CLR using clogit()
 clr <- clogit(y ~ x + Z1 + Z2 + Z3 + Z4 + Z5 + strata(strata), data = illu.data)
 summary(clr)
 
 # fit CLR using gamboost
-boostclr <- gamboost(resp ~ bols(x, intercept = FALSE) + bols(Z1, intercept = FALSE) + 
-                       bols(Z2, intercept = FALSE) + bols(Z3, intercept = FALSE) + 
-                       bols(Z4, intercept = FALSE) + bols(Z5, intercept = FALSE), data = illu.data, family = CLogit(),
-                     control = boost_control(mstop = 1000, nu = 0.3))
+boostclr <- gamboost(resp ~
+bols(x, intercept = FALSE) +
+bols(Z1, intercept = FALSE) + 
+bols(Z2, intercept = FALSE) +
+bols(Z3, intercept = FALSE) + 
+bols(Z4, intercept = FALSE) +
+bols(Z5, intercept = FALSE),
+data = illu.data, family = CLogit(), control = boost_control(mstop = 1000, nu = 0.3))
 
 # compare estimated coefficients
 coef(boostclr)
