@@ -36,14 +36,16 @@ clr <- clogit(y ~ x + Z1 + Z2 + Z3 + Z4 + Z5 + strata(strata), data = illu.data)
 summary(clr)
 
 # fit CLR using gamboost
-boostclr <- gamboost(resp ~
-bols(x, intercept = FALSE) +
-bols(Z1, intercept = FALSE) + 
-bols(Z2, intercept = FALSE) +
-bols(Z3, intercept = FALSE) + 
-bols(Z4, intercept = FALSE) +
-bols(Z5, intercept = FALSE),
-data = illu.data, family = CLogit(), control = boost_control(mstop = 1000, nu = 0.3))
+boostclr <- gamboost(
+  resp ~
+    bols(x, intercept = FALSE) +
+    bols(Z1, intercept = FALSE) +
+    bols(Z2, intercept = FALSE) +
+    bols(Z3, intercept = FALSE) +
+    bols(Z4, intercept = FALSE) +
+    bols(Z5, intercept = FALSE),
+  data = illu.data, family = CLogit(), control = boost_control(mstop = 1000, nu = 0.3))
+
 
 # compare estimated coefficients
 coef(boostclr)
